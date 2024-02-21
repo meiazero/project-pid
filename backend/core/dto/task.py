@@ -12,7 +12,6 @@ class TaskCreator:
         body = http_request.body
 
         title = body.get("title")
-        description = body.get("description")
         deadline = body.get("deadline")
         is_completed = body.get("is_completed")
 
@@ -20,7 +19,6 @@ class TaskCreator:
         create_task_controller = CreateTaskController()
 
         task = create_task_controller.create(title=title,
-                                             description=description,
                                              deadline=deadline,
                                              is_completed=is_completed)
 
@@ -52,11 +50,10 @@ class TaskUpdater:
         body = http_request.body
 
         name = body.get("title")
-        description = body.get("description")
         deadline = body.get("deadline")
         is_completed = body.get("is_completed")
 
-        task = update_task_controller.update(task_id, name, description, deadline, is_completed)
+        task = update_task_controller.update(task_id, name, deadline, is_completed)
 
         return HttpResponse(status_code=200, body=task)
 

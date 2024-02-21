@@ -15,7 +15,6 @@ class GetTaskByIdController:
                 "task": {
                     "id": task.task_id,
                     "title": task.title,
-                    "description": task.description,
                     "deadline": task.deadline,
                     "is_completed": task.is_completed
                 }
