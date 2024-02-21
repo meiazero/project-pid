@@ -2,9 +2,10 @@ import { z } from "zod"
 
 export const taskFormSchema = z.object({
   title: z.string().min(1, {
-    message: "O titulo é obrigatório"
+    message: "O título da tarefa é obrigatório"
   }),
-  description: z.string().optional(),
-  deadline: z.date().optional(),
-  isCompleted: z.boolean().optional()
+  deadline: z.date({
+    required_error: "A data de entrega é obrigatória"
+  }),
+  is_completed: z.boolean().optional()
 })

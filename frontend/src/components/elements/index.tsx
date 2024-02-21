@@ -1,3 +1,6 @@
 export { CreateTaskForm } from "./create-task"
+export { EditTaskDialog } from "./edit-task-dialog"
+export { EditTaskForm } from "./edit-task-form"
 export { Icons } from "./icons"
-export { TaskItem } from "./task"
+export { TaskActionButton } from "./task-action-menu"
+export { TaskTable } from "./task-table"

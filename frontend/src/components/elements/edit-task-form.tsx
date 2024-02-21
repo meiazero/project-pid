@@ -16,7 +16,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { toast } from "@/components/ui/use-toast"
 import { cn } from "@/lib/utils"
 import { taskFormSchema } from "@/schema/task-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,61 +25,44 @@ import { CalendarIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { toast } from "../ui/use-toast"
 import { Icons } from "./icons"
 
-type TaskFormSchema = z.infer<typeof taskFormSchema>
-
-const defaultValuesTaskForm: TaskFormSchema = {
-  title: "",
-  deadline: new Date(),
-  isCompleted: false
+interface EditTaskFormProps {
+  children: React.ReactNode
+  taskId: string
+  data: any
 }
 
-export function CreateTaskForm() {
+export function EditTaskForm({ children, taskId, data }: EditTaskFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const form = useForm<TaskFormSchema>({
+  const defaultValuesTaskForm: z.infer<typeof taskFormSchema> = {
+    ...data,
+    deadline: new Date(data.deadline)
+  }
+
+  const form = useForm<z.infer<typeof taskFormSchema>>({
     defaultValues: defaultValuesTaskForm,
     resolver: zodResolver(taskFormSchema)
   })
 
-  // todo: implementar chamada no banco para criar tarefa
-  const onSubmit = async (values: TaskFormSchema) => {
+  const onSubmit = async (values: z.infer<typeof taskFormSchema>) => {
     setIsLoading(!isLoading)
-    const { title, deadline, isCompleted } = values
-
     try {
-      const response = await fetch("http://localhost:5000/todo", {
-        method: "POST",
+      await fetch(`http://localhost:5000/todo/${taskId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          title,
-          deadline,
-
-          is_completed: isCompleted
-        })
+        body: JSON.stringify(values)
       })
 
-      const data = await response.json()
-
-      if (response.ok) {
-        toast({
-          title: "Tarefa adicionada",
-          description: "Sua tarefa foi adicionada com sucesso"
-        })
-        form.reset()
-      } else {
-        toast({
-          title: "Erro ao adicionar tarefa",
-          description: data?.data || "Ocorreu um erro ao adicionar a tarefa"
-        })
-      }
+      window.location.replace("/todos")
     } catch (error) {
       toast({
-        title: "Erro ao adicionar tarefa",
-        description: "Ocorreu um erro ao adicionar a tarefa"
+        title: "Erro ao Editar tarefa",
+        description: "Ocorreu um erro ao editar a tarefa"
       })
     } finally {
       setIsLoading(isLoading)
@@ -89,10 +71,7 @@ export function CreateTaskForm() {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-lg space-y-6 rounded-lg border px-4 py-2"
-      >
+      <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -118,12 +97,12 @@ export function CreateTaskForm() {
             )}
           />
 
-          <div className="col-span-2 flex flex-row items-end gap-4">
+          <div className="col-span-2 flex items-end justify-between">
             <FormField
               control={form.control}
               name="deadline"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className=" flex flex-col">
                   <FormLabel
                     htmlFor={field.name}
                     className="text-lg font-semibold"
@@ -134,7 +113,8 @@ export function CreateTaskForm() {
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
-                          variant={"outline"}
+                          variant="outline"
+                          disabled={isLoading}
                           className={cn(
                             "w-[240px] pl-3 text-left font-normal",
                             !field.value && "text-muted-foreground"
@@ -161,44 +141,49 @@ export function CreateTaskForm() {
                       />
                     </PopoverContent>
                   </Popover>
-
                   <FormMessage />
                 </FormItem>
               )}
             />
             <FormField
               control={form.control}
-              name="isCompleted"
+              name="is_completed"
               render={({ field }) => (
-                <FormItem className=" flex flex-row items-center justify-start space-x-3 ">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel htmlFor={field.name}>Status da tarefa</FormLabel>
-                    <FormDescription>
-                      Marque se a tarefa já foi concluída.
-                    </FormDescription>
+                <FormItem className="">
+                  <div className="flex flex-row items-center gap-2">
+                    <FormLabel htmlFor={field.name}>
+                      Status da tarefa:
+                    </FormLabel>
+                    <FormControl>
+                      <Checkbox
+                        disabled={isLoading}
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
                   </div>
+                  <FormDescription>
+                    Marque se a tarefa foi concluída
+                  </FormDescription>
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        <Button type="submit" disabled={isLoading} className="font-semibold">
-          {isLoading ? (
-            <>
-              <Icons.spinner className="mr-2 size-4 animate-spin" />
-              Adicionando tarefa
-            </>
-          ) : (
-            "Adicionar tarefa"
-          )}
-        </Button>
+        <div className="flex w-full flex-row justify-between">
+          <Button type="submit">
+            {isLoading ? (
+              <>
+                <Icons.spinner className="mr-2 size-4 animate-spin" />
+                Atualizando tarefa
+              </>
+            ) : (
+              "Atualizar tarefa"
+            )}
+          </Button>
+          {children}
+        </div>
       </form>
     </Form>
   )
