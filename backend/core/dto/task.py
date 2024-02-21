@@ -11,7 +11,7 @@ class TaskCreator:
     def validate_and_create(self, http_request: HttpRequest) -> HttpResponse:
         body = http_request.body
 
-        name = body.get("title")
+        title = body.get("title")
         description = body.get("description")
         deadline = body.get("deadline")
         is_completed = body.get("is_completed")
@@ -19,7 +19,10 @@ class TaskCreator:
         # instancia o controller
         create_task_controller = CreateTaskController()
 
-        task = create_task_controller.create(name, description, deadline, is_completed)
+        task = create_task_controller.create(title=title,
+                                             description=description,
+                                             deadline=deadline,
+                                             is_completed=is_completed)
 
         return HttpResponse(status_code=201, body=task)
 

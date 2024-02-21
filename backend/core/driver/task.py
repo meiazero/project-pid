@@ -4,7 +4,7 @@ from core.db.models.task import Task
 
 class TaskHandler:
     def create_task(self, title: str, deadline, description: str, is_completed: bool) -> Task:
-        task = Task(title, deadline, description, is_completed)
+        task = Task(title=title, deadline=deadline, description=description, is_completed=is_completed)
         db.session.add(task)
         db.session.commit()
         return task

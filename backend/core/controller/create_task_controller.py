@@ -7,7 +7,10 @@ class CreateTaskController:
     def create(self, title, description, deadline, is_completed) -> Dict:
         task_handler = TaskHandler()
 
-        task = task_handler.create_task(title, description, deadline, is_completed)
+        task = task_handler.create_task(title=title,
+                                        description=description,
+                                        deadline=deadline,
+                                        is_completed=is_completed)
         return self.__format_response(task)
 
     def __format_response(self, task) -> Dict:
