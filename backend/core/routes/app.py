@@ -4,5 +4,5 @@ app = Blueprint('app', __name__)
 
 
 @app.route("/", methods=["GET"])
-def index(request):
-    return jsonify({"message": "Hello, World!"})
+def home():
+    return jsonify({"message": "Hello, World!"}), 200
