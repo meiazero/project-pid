@@ -33,7 +33,7 @@ type TaskFormSchema = z.infer<typeof taskFormSchema>
 const defaultValuesTaskForm: TaskFormSchema = {
   title: "",
   deadline: new Date(),
-  isCompleted: false
+  is_completed: false
 }
 
 export function CreateTaskForm() {
@@ -47,7 +47,7 @@ export function CreateTaskForm() {
   // todo: implementar chamada no banco para criar tarefa
   const onSubmit = async (values: TaskFormSchema) => {
     setIsLoading(!isLoading)
-    const { title, deadline, isCompleted } = values
+    const { title, deadline, is_completed } = values
 
     try {
       const response = await fetch("http://localhost:5000/todo", {
@@ -58,8 +58,7 @@ export function CreateTaskForm() {
         body: JSON.stringify({
           title,
           deadline,
-
-          is_completed: isCompleted
+          is_completed
         })
       })
 
@@ -168,7 +167,7 @@ export function CreateTaskForm() {
             />
             <FormField
               control={form.control}
-              name="isCompleted"
+              name="is_completed"
               render={({ field }) => (
                 <FormItem className=" flex flex-row items-center justify-start space-x-3 ">
                   <FormControl>

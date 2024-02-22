@@ -31,6 +31,7 @@ import { Icons } from "./icons"
 interface EditTaskFormProps {
   children: React.ReactNode
   taskId: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any
 }
 

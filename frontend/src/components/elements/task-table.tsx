@@ -46,7 +46,7 @@ export function TaskTable({ data }: TaskTableProps) {
                 <TableRow key={task.id}>
                   <TableCell>{task.title}</TableCell>
                   <TableCell>
-                    {!!task.is_complete ? (
+                    {task.is_complete ? (
                       <Badge className="bg-emerald-500 text-background hover:bg-emerald-600 focus:bg-emerald-600">
                         Concluída
                       </Badge>

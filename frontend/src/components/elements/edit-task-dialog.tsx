@@ -27,7 +27,7 @@ export function EditTaskDialog({ taskId }: EditTaskDialogProps) {
       .then(response => response.json())
       .then(data => setTodo(data?.data?.task))
       .catch(error => console.error(error))
-  }, [])
+  }, [taskId])
 
   return (
     <AlertDialog>
