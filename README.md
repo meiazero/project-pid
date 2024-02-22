@@ -20,7 +20,7 @@
 
 > Banco de dados foi utilizado o PostgreSQL
 
-## Instalação
+## Executando o projeto individualmente
 
 #### Frontend
 ```bash
@@ -48,6 +48,17 @@ pip install -r requirements.txt
 
 ```bash
 python app.py
+```
+
+## Executando o projeto completo (pode haver falhas)
+
+```bash
+docker compose up -d
+```
+ou
+
+```bash
+docker-compose up -d
 ```
 
 ## Autor
