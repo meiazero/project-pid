@@ -21,6 +21,8 @@ npm run dev
 ```
 
 ### Utilizando Docker
+
+#### Contruindo a imagem
 ```bash
-em contrução
+docker build -t frontend-pid .
 ```

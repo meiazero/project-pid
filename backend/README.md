@@ -46,6 +46,8 @@ python app.py
 ```
 
 ### Utilizando Docker
+
+#### Contruindo a imagem
 ```bash
-em contrução
+docker build -t backend-pid .
 ```
